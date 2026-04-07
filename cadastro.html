@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <title>IMC Kids - Minha Área</title>
+</head>
+<body class="cadastro-bg py-5">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-light bg-white shadow-sm mb-4 px-4 rounded-3 mx-3">
+        <span class="navbar-brand fw-bold text-primary">🧒 IMC Kids</span>
+        <div class="d-flex align-items-center gap-3">
+            <span class="text-muted small" id="nomeUsuarioNav"></span>
+            <a href="admin.html" class="btn btn-outline-primary btn-sm d-none" id="btnVoltarAdmin">🛡️ Painel Admin</a>
+            <button class="btn btn-outline-danger btn-sm" onclick="logout()">🚪 Sair</button>
+        </div>
+    </nav>
+
+    <div class="container" style="max-width: 760px;">
+        <!-- ===== Card Resumo do Responsável ===== -->
+        <div class="card shadow rounded-4 p-4 mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex align-items-center gap-3">
+                    <div id="fotoResponsavelDisplay" style="width:50px;height:50px;flex-shrink:0;"></div>
+                    <h5 class="fw-bold text-primary mb-0">👤 Meus dados</h5>
+                </div>
+                <button class="btn btn-outline-primary btn-sm" id="btnEditarPerfil">✏️ Editar dados</button>
+            </div>
+            <div class="row g-2 text-muted small" id="dadosResponsavel">
+                <!-- preenchido pelo JS -->
+            </div>
+        </div>
+
+        <!-- ===== Formulário Editar Perfil (oculto por padrão) ===== -->
+        <div class="card shadow rounded-4 p-4 mb-4 d-none" id="cardEditarPerfil">
+            <h5 class="fw-bold text-primary mb-1">✏️ Editar meus dados</h5>
+            <p class="text-muted small mb-4">Altere os campos desejados e clique em Salvar.</p>
+
+            <form id="formEditarPerfil" novalidate>
+
+                <h6 class="fw-semibold text-secondary mb-3 border-bottom pb-2">👤 Dados Pessoais</h6>
+                <div class="row g-3">
+
+                    <div class="col-12 d-flex flex-column align-items-center">
+                        <label class="form-label fw-semibold mb-2">📷 Foto <span class="text-muted fw-normal small">(opcional)</span></label>
+                        <div class="foto-upload-box" id="editFotoBox">
+                            <input type="file" id="editFotoInput" accept="image/*" class="d-none">
+                            <img id="editFotoPreview" class="foto-preview d-none" alt="Foto">
+                            <div class="foto-placeholder" id="editFotoPh">
+                                <span class="foto-icon">📷</span>
+                                <small>Clique para<br>adicionar foto</small>
+                            </div>
+                            <button type="button" class="foto-remover d-none" id="editFotoRm" title="Remover foto">✕</button>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label fw-semibold" for="editNome">📝 Nome completo <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="editNome" required>
+                        <div class="invalid-feedback">Informe o nome completo.</div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label class="form-label fw-semibold" for="editNascimento">🎂 Data de nascimento <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" id="editNascimento" required>
+                        <div class="invalid-feedback">Informe a data de nascimento.</div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label class="form-label fw-semibold" for="editSexo">📄 Sexo <span class="text-danger">*</span></label>
+                        <select class="form-select" id="editSexo" required>
+                            <option value="">Selecione...</option>
+                            <option value="Masculino">♂️ Masculino</option>
+                            <option value="Feminino">♀️ Feminino</option>
+                        </select>
+                        <div class="invalid-feedback">Selecione o sexo.</div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label class="form-label fw-semibold" for="editTelefone">📱 Telefone / WhatsApp <span class="text-danger">*</span></label>
+                        <input type="tel" class="form-control" id="editTelefone" maxlength="15" inputmode="numeric" required>
+                        <div class="invalid-feedback">Informe o telefone.</div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label class="form-label fw-semibold" for="editTipoDoc">🪖 Documento <span class="text-danger">*</span></label>
+                        <select class="form-select" id="editTipoDoc">
+                            <option value="cpf">CPF</option>
+                            <option value="rg">RG</option>
+                        </select>
+                    </div>
+
+                    <div class="col-sm-8" id="editCampoCPF">
+                        <label class="form-label fw-semibold" for="editCPF">CPF <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="editCPF" placeholder="000.000.000-00" maxlength="14" inputmode="numeric" required>
+                        <div class="invalid-feedback">CPF inválido.</div>
+                    </div>
+
+                    <div class="col-sm-8 d-none" id="editCampoRG">
+                        <label class="form-label fw-semibold" for="editRG">RG <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="editRG" placeholder="00.000.000-0" maxlength="12" inputmode="numeric">
+                        <div class="invalid-feedback">Informe o RG.</div>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label fw-semibold" for="editEmail">📧 E-mail <span class="text-danger">*</span></label>
+                        <input type="email" class="form-control" id="editEmail" required>
+                        <div class="invalid-feedback">Informe um e-mail válido.</div>
+                    </div>
+
+                </div>
+
+                <h6 class="fw-semibold text-secondary mb-3 border-bottom pb-2 mt-4">📍 Endereço Residencial</h6>
+                <div class="row g-3">
+
+                    <div class="col-sm-4">
+                        <label class="form-label fw-semibold" for="editCEP">📮 CEP <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="editCEP" placeholder="00000-000" maxlength="9" inputmode="numeric" required>
+                            <span class="input-group-text d-none" id="editCepSpinner">
+                                <span class="spinner-border spinner-border-sm text-secondary" role="status"></span>
+                            </span>
+                        </div>
+                        <div class="invalid-feedback">Informe o CEP.</div>
+                        <div id="editCepErro" class="text-danger small d-none mt-1">CEP não encontrado.</div>
+                    </div>
+
+                    <div class="col-sm-8">
+                        <label class="form-label fw-semibold" for="editLogradouro">🏠 Logradouro <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="editLogradouro" required>
+                        <div class="invalid-feedback">Informe o logradouro.</div>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <label class="form-label fw-semibold" for="editNumero">Número <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="editNumero" required>
+                        <div class="invalid-feedback">Informe o número.</div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label class="form-label fw-semibold" for="editComplemento">Complemento</label>
+                        <input type="text" class="form-control" id="editComplemento">
+                    </div>
+
+                    <div class="col-sm-5">
+                        <label class="form-label fw-semibold" for="editBairro">🏘️ Bairro <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="editBairro" required>
+                        <div class="invalid-feedback">Informe o bairro.</div>
+                    </div>
+
+                    <div class="col-sm-8">
+                        <label class="form-label fw-semibold" for="editCidade">🌆 Cidade <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="editCidade" required>
+                        <div class="invalid-feedback">Informe a cidade.</div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label class="form-label fw-semibold" for="editEstado">🗺️ Estado <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="editEstado" maxlength="2" required>
+                        <div class="invalid-feedback">Informe o estado.</div>
+                    </div>
+
+                </div>
+
+                <h6 class="fw-semibold text-secondary mb-3 border-bottom pb-2 mt-4">🔐 Alterar senha <span class="text-muted fw-normal small">(opcional)</span></h6>
+                <div class="row g-3">
+
+                    <div class="col-sm-6">
+                        <label class="form-label fw-semibold" for="editNovaSenha">Nova senha</label>
+                        <div class="input-group has-validation">
+                            <input type="password" class="form-control" id="editNovaSenha" placeholder="Deixe em branco para não alterar" minlength="6" autocomplete="new-password">
+                            <button class="btn btn-outline-secondary btn-toggle-senha" type="button" data-target="editNovaSenha" title="Mostrar/ocultar senha">👁️</button>
+                            <div class="invalid-feedback">A senha deve ter ao menos 6 caracteres.</div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label class="form-label fw-semibold" for="editConfSenha">Confirmar nova senha</label>
+                        <div class="input-group has-validation">
+                            <input type="password" class="form-control" id="editConfSenha" placeholder="Repita a nova senha" autocomplete="new-password">
+                            <button class="btn btn-outline-secondary btn-toggle-senha" type="button" data-target="editConfSenha" title="Mostrar/ocultar senha">👁️</button>
+                            <div class="invalid-feedback">As senhas não coincidem.</div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div id="editAlerta" class="alert d-none mt-4" role="alert"></div>
+
+                <div class="d-flex gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg flex-fill">💾 Salvar alterações</button>
+                    <button type="button" class="btn btn-outline-secondary btn-lg" id="btnCancelarEdicao">❌ Cancelar</button>
+                </div>
+
+            </form>
+        </div>
+
+        <!-- ===== Filhos cadastrados ===== -->
+        <div class="card shadow rounded-4 p-4 mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold text-primary mb-0" id="tituloListaFilhos">👦 Meus filhos cadastrados</h5>
+                <div class="d-flex gap-2">
+                    <a href="admin.html" class="btn btn-outline-secondary btn-sm d-none" id="btnAdminCadastros">📊 Ver todos no painel</a>
+                    <button class="btn btn-success btn-sm" id="btnAdicionarFilho">➕ <span id="textoBtnAdicionar">Adicionar criança</span></button>
+                </div>
+            </div>
+            <div id="listaFilhos">
+                <p class="text-muted small mb-0" id="semFilhos">Nenhum filho cadastrado ainda.</p>
+            </div>
+        </div>
+
+        <!-- ===== Formulário Novo Filho (oculto por padrão) ===== -->
+        <div class="card shadow rounded-4 p-4 d-none" id="cardFormFilho">
+            <h5 class="fw-bold text-primary mb-1" id="tituloFormFilho">➕ Cadastrar filho</h5>
+            <p class="text-muted small mb-4" id="subtituloFormFilho">Os dados do responsável são preenchidos automaticamente com o seu perfil.</p>
+
+            <form id="formCadastro" novalidate>
+
+                <h6 class="fw-semibold text-secondary mb-3 border-bottom pb-2">👦 Dados da Criança</h6>
+
+                <div class="row g-3">
+
+                    <div class="col-12 d-flex flex-column align-items-center">
+                        <label class="form-label fw-semibold mb-2">📷 Foto <span class="text-muted fw-normal small">(opcional)</span></label>
+                        <div class="foto-upload-box" id="addFotoBox">
+                            <input type="file" id="addFotoInput" accept="image/*" class="d-none">
+                            <img id="addFotoPreview" class="foto-preview d-none" alt="Foto">
+                            <div class="foto-placeholder" id="addFotoPh">
+                                <span class="foto-icon">📷</span>
+                                <small>Clique para<br>adicionar foto</small>
+                            </div>
+                            <button type="button" class="foto-remover d-none" id="addFotoRm" title="Remover foto">✕</button>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label fw-semibold" for="nomeCompleto">📝 Nome completo <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="nomeCompleto" placeholder="Nome da criança" required>
+                        <div class="invalid-feedback">Informe o nome completo.</div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label class="form-label fw-semibold" for="dataNascimento">🎂 Data de nascimento <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" id="dataNascimento" required>
+                        <div class="invalid-feedback">Informe a data de nascimento.</div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label class="form-label fw-semibold" for="sexoCrianca">👦👧 Sexo <span class="text-danger">*</span></label>
+                        <select class="form-select" id="sexoCrianca" required>
+                            <option value="">Selecione...</option>
+                            <option value="Masculino">♂️ Masculino</option>
+                            <option value="Feminino">♀️ Feminino</option>
+                        </select>
+                        <div class="invalid-feedback">Selecione o sexo.</div>
+                    </div>
+
+                    <div class="col-12 d-none" id="avisoFaixaEtaria">
+                        <div class="alert alert-warning py-2 mb-0 small">
+                            ⚠️ Criança fora da faixa etária do IMC Kids (3–11 anos). Será registrada como “Fora da faixa etária” no painel do admin.
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label class="form-label fw-semibold" for="cpfCrianca">
+                            🪖 CPF da criança
+                            <span class="text-muted fw-normal small">(opcional)</span>
+                        </label>
+                        <input type="text" class="form-control" id="cpfCrianca" placeholder="000.000.000-00" maxlength="14" inputmode="numeric"> 
+                        <div class="invalid-feedback">CPF inválido.</div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label class="form-label fw-semibold" for="parentesco">👨‍👧 Parentesco <span class="text-danger">*</span></label>
+                        <select class="form-select" id="parentesco" required>
+                            <option value="">Selecione...</option>
+                            <option>Mãe</option>
+                            <option>Pai</option>
+                            <option>Avó / Avô</option>
+                            <option>Tia / Tio</option>
+                            <option>Responsável legal</option>
+                            <option>Outro</option>
+                        </select>
+                        <div class="invalid-feedback">Selecione o parentesco.</div>
+                    </div>
+
+
+
+                </div>
+
+                <!-- ===== Saúde da Criança ===== -->
+                <h6 class="fw-semibold text-secondary mb-3 border-bottom pb-2 mt-4">🩺 Saúde da Criança</h6>
+
+                <div class="row g-3">
+
+                    <div class="col-12">
+                        <label class="form-label fw-semibold" for="doencas">🔴 Doenças diagnosticadas</label>
+                        <textarea class="form-control" id="doencas" rows="2"
+                            placeholder="Ex: Diabetes tipo 1, Asma, Hipotireoidismo..."></textarea>
+                        <div class="form-text">Separe por vírgula ou descreva livremente.</div>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label fw-semibold" for="alergias">⚠️ Alergias</label>
+                        <textarea class="form-control" id="alergias" rows="2"
+                            placeholder="Ex: Amendoim, Lactose, Dipirona, Picada de abelha..."></textarea>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label fw-semibold" for="comorbidades">🟡 Comorbidades</label>
+                        <textarea class="form-control" id="comorbidades" rows="2"
+                            placeholder="Ex: Obesidade, Hipertensão, Síndrome de Down..."></textarea>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label fw-semibold" for="medicamentos">💊 Medicamentos em uso</label>
+                        <textarea class="form-control" id="medicamentos" rows="2"
+                            placeholder="Ex: Metformina 500mg (1x ao dia), Salbutamol (se necessário)..."></textarea>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label fw-semibold" for="observacoesSaude">📝 Outras observações de saúde</label>
+                        <textarea class="form-control" id="observacoesSaude" rows="2"
+                            placeholder="Informações adicionais relevantes para a equipe de saúde..."></textarea>
+                    </div>
+
+                </div>
+
+                <div id="alertaSucesso" class="alert alert-success d-none mt-4" role="alert">
+                    ✅ Filho cadastrado com sucesso!
+                </div>
+                <div id="alertaErro" class="alert alert-danger d-none mt-4" role="alert">
+                    ❌ Corrija os campos destacados antes de continuar.
+                </div>
+
+                <div class="d-flex gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg flex-fill">💾 Salvar</button>
+                    <button type="button" class="btn btn-outline-secondary btn-lg" id="btnCancelarFilho">❌ Cancelar</button>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+
+    <!-- ===== Modal Editar Filho ===== -->
+    <div class="modal fade" id="modalEditarFilho" tabindex="-1" aria-labelledby="modalEditarFilhoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content rounded-4">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold text-primary" id="modalEditarFilhoLabel">✏️ Editar dados do filho</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditarFilho" novalidate>
+                        <input type="hidden" id="editFilhoId">
+
+                        <h6 class="fw-semibold text-secondary mb-3 border-bottom pb-2">👦 Dados da Criança</h6>
+                        <div class="row g-3">
+                            <div class="col-12 d-flex flex-column align-items-center">
+                                <label class="form-label fw-semibold mb-2">📷 Foto <span class="text-muted fw-normal small">(opcional)</span></label>
+                                <div class="foto-upload-box" id="editFilhoFotoBox">
+                                    <input type="file" id="editFilhoFotoInput" accept="image/*" class="d-none">
+                                    <img id="editFilhoFotoPreview" class="foto-preview d-none" alt="Foto">
+                                    <div class="foto-placeholder" id="editFilhoFotoPh">
+                                        <span class="foto-icon">📷</span>
+                                        <small>Clique para<br>adicionar foto</small>
+                                    </div>
+                                    <button type="button" class="foto-remover d-none" id="editFilhoFotoRm" title="Remover foto">✕</button>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold" for="editFilhoNome">Nome completo <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="editFilhoNome" required>
+                                <div class="invalid-feedback">Informe o nome completo.</div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="form-label fw-semibold" for="editFilhoNasc">🎂 Data de nascimento <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="editFilhoNasc" required>
+                                <div class="invalid-feedback">Informe a data de nascimento.</div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="form-label fw-semibold" for="editFilhoSexo">👦👧 Sexo <span class="text-danger">*</span></label>
+                                <select class="form-select" id="editFilhoSexo" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="Masculino">♂️ Masculino</option>
+                                    <option value="Feminino">♀️ Feminino</option>
+                                </select>
+                                <div class="invalid-feedback">Selecione o sexo.</div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="form-label fw-semibold" for="editFilhoCPF">🪖 CPF <span class="text-muted fw-normal small">(opcional)</span></label>
+                                <input type="text" class="form-control" id="editFilhoCPF" placeholder="000.000.000-00" maxlength="14" inputmode="numeric">
+                                <div class="invalid-feedback">CPF inválido.</div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="form-label fw-semibold" for="editFilhoParentesco">👨‍👧 Parentesco <span class="text-danger">*</span></label>
+                                <select class="form-select" id="editFilhoParentesco" required>
+                                    <option value="">Selecione...</option>
+                                    <option>Mãe</option>
+                                    <option>Pai</option>
+                                    <option>Avó / Avô</option>
+                                    <option>Tia / Tio</option>
+                                    <option>Responsável legal</option>
+                                    <option>Outro</option>
+                                </select>
+                                <div class="invalid-feedback">Selecione o parentesco.</div>
+                            </div>
+
+                        </div>
+
+                        <h6 class="fw-semibold text-secondary mb-3 border-bottom pb-2 mt-4">🩺 Saúde da Criança</h6>
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label fw-semibold" for="editFilhoDoencas">Doenças diagnosticadas</label>
+                                <textarea class="form-control" id="editFilhoDoencas" rows="2" placeholder="Ex: Diabetes tipo 1, Asma..."></textarea>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold" for="editFilhoAlergias">Alergias</label>
+                                <textarea class="form-control" id="editFilhoAlergias" rows="2" placeholder="Ex: Amendoim, Lactose..."></textarea>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold" for="editFilhoComorbidades">Comorbidades</label>
+                                <textarea class="form-control" id="editFilhoComorbidades" rows="2" placeholder="Ex: Obesidade, Hipertensão..."></textarea>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold" for="editFilhoMedicamentos">Medicamentos em uso</label>
+                                <textarea class="form-control" id="editFilhoMedicamentos" rows="2" placeholder="Ex: Metformina 500mg..."></textarea>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold" for="editFilhoObs">Outras observações</label>
+                                <textarea class="form-control" id="editFilhoObs" rows="2" placeholder="Informações adicionais..."></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="btnSalvarEdicaoFilho">💾 Salvar alterações</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== Modal Confirmar Exclusão ===== -->
+    <div class="modal fade" id="modalConfirmarExclusao" tabindex="-1" aria-labelledby="modalExclusaoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow">
+                <div class="modal-header bg-danger text-white rounded-top-4 border-0">
+                    <h5 class="modal-title fw-bold" id="modalExclusaoLabel">🗑️ Confirmar exclusão</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body py-4">
+                    <p class="mb-0" id="modalExclusaoMensagem"></p>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="btnConfirmarExclusao">🗑️ Sim, excluir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script src="script.js"></script>
+    <script src="cadastro.js"></script>

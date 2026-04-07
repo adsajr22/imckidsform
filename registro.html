@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <title>IMC Kids - Criar Conta</title>
+</head>
+<body class="cadastro-bg py-5">
+
+    <div class="container" style="max-width: 680px;">
+
+        <div class="text-center mb-5 mt-5">
+            <div class="login-icon login-icon-sm mx-auto mb-4"><img src="imckids.png" alt="IMC Kids"></div>
+            <p class="text-muted small">📝 Preencha seus dados para acessar o IMC Kids</p>
+        </div>
+
+        <div class="card shadow-lg rounded-4 p-4">
+            <form id="formRegistro" novalidate>
+
+                <!-- ===== Dados Pessoais ===== -->
+                <h5 class="fw-semibold text-secondary mb-3 border-bottom pb-2">👤 Dados Pessoais</h5>
+                <div class="row g-3">
+
+                    <div class="col-12 d-flex flex-column align-items-center">
+                        <label class="form-label fw-semibold mb-2">📷 Foto <span class="text-muted fw-normal small">(opcional)</span></label>
+                        <div class="foto-upload-box" id="regFotoBox">
+                            <input type="file" id="regFotoInput" accept="image/*" class="d-none">
+                            <img id="regFotoPreview" class="foto-preview d-none" alt="Foto">
+                            <div class="foto-placeholder" id="regFotoPh">
+                                <span class="foto-icon">📷</span>
+                                <small>Clique para<br>adicionar foto</small>
+                            </div>
+                            <button type="button" class="foto-remover d-none" id="regFotoRm" title="Remover foto">✕</button>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label fw-semibold" for="regNome">📝 Nome completo <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="regNome" placeholder="Seu nome completo" required>
+                        <div class="invalid-feedback">Informe seu nome completo.</div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label class="form-label fw-semibold" for="regNascimento">🎂 Data de nascimento <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" id="regNascimento" required>
+                        <div class="invalid-feedback">Informe sua data de nascimento.</div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label class="form-label fw-semibold" for="regSexo">📄 Sexo <span class="text-danger">*</span></label>
+                        <select class="form-select" id="regSexo" required>
+                            <option value="">Selecione...</option>
+                            <option value="Masculino">♂️ Masculino</option>
+                            <option value="Feminino">♀️ Feminino</option>
+                        </select>
+                        <div class="invalid-feedback">Selecione o sexo.</div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label class="form-label fw-semibold" for="regTelefone">📱 Telefone / WhatsApp <span class="text-danger">*</span></label>
+                        <input type="tel" class="form-control" id="regTelefone" placeholder="(00) 90000-0000" maxlength="15" inputmode="numeric" required>
+                        <div class="invalid-feedback">Informe o telefone.</div>
+                    </div>
+
+                    <!-- Tipo de documento -->
+                    <div class="col-sm-4">
+                        <label class="form-label fw-semibold" for="regTipoDoc">🪖 Documento <span class="text-danger">*</span></label>
+                        <select class="form-select" id="regTipoDoc">
+                            <option value="cpf">CPF</option>
+                            <option value="rg">RG</option>
+                        </select>
+                    </div>
+
+                    <div class="col-sm-8" id="campoCPF">
+                        <label class="form-label fw-semibold" for="regCPF">CPF <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="regCPF" placeholder="000.000.000-00" maxlength="14" inputmode="numeric" required>
+                        <div class="invalid-feedback">CPF inválido.</div>
+                    </div>
+
+                    <div class="col-sm-8 d-none" id="campoRG">
+                        <label class="form-label fw-semibold" for="regRG">RG <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="regRG" placeholder="00.000.000-0" maxlength="12" inputmode="numeric">
+                        <div class="invalid-feedback">Informe o RG.</div>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label fw-semibold" for="regEmail">📧 E-mail <span class="text-danger">*</span></label>
+                        <input type="email" class="form-control" id="regEmail" placeholder="exemplo@email.com" required>
+                        <div class="invalid-feedback">Informe um e-mail válido.</div>
+                    </div>
+
+                </div>
+
+                <!-- ===== Endereço ===== -->
+                <h5 class="fw-semibold text-secondary mb-3 border-bottom pb-2 mt-4">📍 Endereço Residencial</h5>
+                <div class="row g-3">
+
+                    <div class="col-sm-4">
+                        <label class="form-label fw-semibold" for="regCEP">📮 CEP <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="regCEP" placeholder="00000-000" maxlength="9" inputmode="numeric" required>
+                            <span class="input-group-text d-none" id="cepSpinner">
+                                <span class="spinner-border spinner-border-sm text-secondary" role="status"></span>
+                            </span>
+                        </div>
+                        <div class="invalid-feedback">Informe o CEP.</div>
+                        <div id="cepErro" class="text-danger small d-none mt-1">CEP não encontrado. Preencha manualmente.</div>
+                    </div>
+
+                    <div class="col-sm-8">
+                        <label class="form-label fw-semibold" for="regLogradouro">🏠 Logradouro <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="regLogradouro" placeholder="Rua, Av., etc." required>
+                        <div class="invalid-feedback">Informe o logradouro.</div>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <label class="form-label fw-semibold" for="regNumero">Número <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="regNumero" placeholder="Nº" required>
+                        <div class="invalid-feedback">Informe o número.</div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label class="form-label fw-semibold" for="regComplemento">Complemento</label>
+                        <input type="text" class="form-control" id="regComplemento" placeholder="Apto, Bloco...">
+                    </div>
+
+                    <div class="col-sm-5">
+                        <label class="form-label fw-semibold" for="regBairro">🏘️ Bairro <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="regBairro" placeholder="Bairro" required>
+                        <div class="invalid-feedback">Informe o bairro.</div>
+                    </div>
+
+                    <div class="col-sm-8">
+                        <label class="form-label fw-semibold" for="regCidade">🌆 Cidade <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="regCidade" placeholder="Cidade" required>
+                        <div class="invalid-feedback">Informe a cidade.</div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label class="form-label fw-semibold" for="regEstado">🗺️ Estado <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="regEstado" placeholder="UF" maxlength="2" required>
+                        <div class="invalid-feedback">Informe o estado.</div>
+                    </div>
+
+                </div>
+
+                <!-- ===== Dados de Acesso ===== -->
+                <h5 class="fw-semibold text-secondary mb-3 border-bottom pb-2 mt-4">🔐 Dados de Acesso</h5>
+                <div class="row g-3">
+
+                    <div class="col-12">
+                        <label class="form-label fw-semibold" for="regLogin">👤 Login (usuário) <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="regLogin" placeholder="Escolha um nome de usuário" required autocomplete="username">
+                        <div class="invalid-feedback">Informe o login desejado.</div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label class="form-label fw-semibold" for="regSenha">🔐 Senha <span class="text-danger">*</span></label>
+                        <div class="input-group has-validation">
+                            <input type="password" class="form-control" id="regSenha" placeholder="Mínimo 6 caracteres" required minlength="6" autocomplete="new-password">
+                            <button class="btn btn-outline-secondary btn-toggle-senha" type="button" data-target="regSenha" title="Mostrar/ocultar senha">👁️</button>
+                            <div class="invalid-feedback">A senha deve ter ao menos 6 caracteres.</div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label class="form-label fw-semibold" for="regConfSenha">🔑 Confirmar senha <span class="text-danger">*</span></label>
+                        <div class="input-group has-validation">
+                            <input type="password" class="form-control" id="regConfSenha" placeholder="Repita a senha" required autocomplete="new-password">
+                            <button class="btn btn-outline-secondary btn-toggle-senha" type="button" data-target="regConfSenha" title="Mostrar/ocultar senha">👁️</button>
+                            <div class="invalid-feedback">As senhas não coincidem.</div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div id="regAlerta" class="alert d-none mt-4" role="alert"></div>
+
+                <div class="d-flex gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg flex-fill">✨ Criar conta</button>
+                    <a href="index.html" class="btn btn-outline-secondary btn-lg">⬅️ Voltar</a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script src="script.js"></script>
+    <script src="registro.js"></script>
+</body>
+</html>
