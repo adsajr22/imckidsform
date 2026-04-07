@@ -148,23 +148,32 @@ alter table public.criancas enable row level security;
 
 
 -- ── Políticas para PERFIS ──────────────────────────────────
+-- Usar policies separadas por operação evita recursão infinita no Supabase.
 
-drop policy if exists "Perfil: anon faz tudo" on public.perfis;
-create policy "Perfil: anon faz tudo"
-    on public.perfis for all
-    to anon
-    using (true)
-    with check (true);
+drop policy if exists "Perfil: anon faz tudo"  on public.perfis;
+drop policy if exists "Perfil: anon select"    on public.perfis;
+drop policy if exists "Perfil: anon insert"    on public.perfis;
+drop policy if exists "Perfil: anon update"    on public.perfis;
+drop policy if exists "Perfil: anon delete"    on public.perfis;
+
+create policy "Perfil: anon select" on public.perfis for select to anon using (true);
+create policy "Perfil: anon insert" on public.perfis for insert to anon with check (true);
+create policy "Perfil: anon update" on public.perfis for update to anon using (true) with check (true);
+create policy "Perfil: anon delete" on public.perfis for delete to anon using (true);
 
 
 -- ── Políticas para CRIANÇAS ───────────────────────────────
 
-drop policy if exists "Criança: anon faz tudo" on public.criancas;
-create policy "Criança: anon faz tudo"
-    on public.criancas for all
-    to anon
-    using (true)
-    with check (true);
+drop policy if exists "Criança: anon faz tudo"  on public.criancas;
+drop policy if exists "Criança: anon select"    on public.criancas;
+drop policy if exists "Criança: anon insert"    on public.criancas;
+drop policy if exists "Criança: anon update"    on public.criancas;
+drop policy if exists "Criança: anon delete"    on public.criancas;
+
+create policy "Criança: anon select" on public.criancas for select to anon using (true);
+create policy "Criança: anon insert" on public.criancas for insert to anon with check (true);
+create policy "Criança: anon update" on public.criancas for update to anon using (true) with check (true);
+create policy "Criança: anon delete" on public.criancas for delete to anon using (true);
 
 
 -- ============================================================
